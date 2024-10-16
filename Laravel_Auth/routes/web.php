@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-// Route::middleware('auth')->group(function () {
-//    Route::view('/','welcome')->name('home');
-// });
+Route::middleware('auth')->group(function () {
+   Route::view('/','welcome')->name('home');
+});
 
-Route::view('/','welcome')->name('home');
+// Route::view('/','welcome')->name('home');
 
 
 
