@@ -21,7 +21,7 @@ class AuthController extends Controller
         ]);
         $credentials=$request->only('email','password');
         if(Auth::attempt( $credentials )){
-            return redirect()->intended(route('home'));
+            return redirect()->intended(route("home"));
         }
         return redirect(route('login'))->with('error','Login failed');
 
@@ -63,4 +63,11 @@ class AuthController extends Controller
     return redirect(route('register'))->with('error','Failed register');
 }
 }
+
+public function logout(Request $request){
+   Auth::logout();
+   return redirect('login');
+
+    }
 }
+

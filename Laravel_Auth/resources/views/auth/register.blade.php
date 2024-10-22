@@ -46,7 +46,7 @@
                        </div>
                        <br>
 
-                       <a href="login">Already registered !! Login Here.</a>
+                      
 
                         </form>
 

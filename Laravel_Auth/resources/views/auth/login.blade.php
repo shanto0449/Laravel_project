@@ -33,13 +33,16 @@
                <input type="password" class="form-control" placeholder="Enter Password" name="password" >
                <span class="text-danger">@error('password') {{$message}}@enderror</span>
            </div>
+           <br>
 
            <div class="form-group">
             <button class="btn btn-block btn-primary" type="submit">Login</button>
+            <button ><a class="btn btn-block btn-primary" href="/register">Register</a></button>
+
 
            </div>
-           <br>
-          <a href="registration">New User !! Register Here</a>
+
+
 
             </form>
 
