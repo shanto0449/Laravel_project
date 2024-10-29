@@ -2,61 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\About;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use  App\Models\User;
-use  App\Models\Blog;
-use  App\Models\Title;
+use App\Models\User;
+use App\Models\Blog;
+use App\Models\slider;
 use App\Models\Contact;
 use Session;
 
 class AuthController extends Controller
 {
-    function login(){
-      return view('login');
+    function login()
+    {
+        return view('login');
     }
 
-    function loginPost(Request $request){
+    function loginPost(Request $request)
+    {
         $request->validate([
-            'email' =>'required',
-            'password'=> 'required',
+            'email' => 'required',
+            'password' => 'required',
         ]);
-        $credentials=$request ->only('email','password');
-        if(Auth::attempt($credentials)){
-            return redirect()->intended(route('home'))->with('success','Login Successfuly');
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended(route('home'))->with('success', 'Login Successfuly');
         }
-        return redirect(route('login'))->with('error','Login fail');
+        return redirect(route('login'))->with('error', 'Login fail');
 
 
     }
 
-    function registration(){
+    function registration()
+    {
         return view('registration');
     }
 
-    function registrationPost(Request $request){
-        $request ->validate([
-            'name'=>'required',
-            'email'=> 'required|unique:users',
-            'password'=> 'required',
+    function registrationPost(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required|min:4|max:8',
         ]);
         // $user= new User();
         // $user->name= $request->name;
-        $data['name']=$request->name;
-        $data['email']=$request->email;
-        $data['password']=Hash::make($request->password);
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['password'] = Hash::make($request->password);
 
-        $user=User::create($data);
+        $user = User::create($data);
 
-        if(!$user){
-            return redirect(route('registrtion'))->with('error','Registion Failed');
+        if (!$user) {
+            return redirect(route('registrtion'))->with('error', 'Registion Failed');
         }
-        return redirect(route('login'))->with('success','Registration Successfully');
+        return redirect(route('login'))->with('success', 'Registration Successfully');
 
     }
 
-    function logout(){
+    function logout()
+    {
         Session::flush();
         Auth::logout();
         return redirect(route('login'));
@@ -64,55 +70,136 @@ class AuthController extends Controller
     }
 
     //blog function----
-    function addBlog(){
+    function addBlog()
+    {
         return view('add-blog');
     }
 
 
-    function blogPost(Request $request){
-        $blog= new Blog();
+    function blogPost(Request $request)
+    {
+        $request->validate([
+             'image'=>'required|max:2048|mimes:jpeg,jpg,png,gif',
+            'title'=>'required | min:10|max:80',
+            'description'=>'nullable | max:250',
+            ]);
+        $blog = new Blog();
         // $blog->image=$request->image;
         $blog->image = $request->file('image')->storeAs('images', $request->image->getClientOriginalName(), 'public');
-        $blog->title = $request -> title;
-        $blog->description = $request -> description;
+        $blog->title = $request->title;
+        $blog->description = $request->description;
         $blog->save();
+        if($blog){
+            return redirect('view-blog');
+        }else{
+            return 'Blog post fail';
+        }
     }
 
-    function viewBlog(Request $request){
-        $blogData=Blog::latest()->paginate(3);
-        return view('view-blog',['blogs'=>$blogData]);
+    function viewBlog(Request $request)
+    {
+        $blogData = Blog::latest()->get();
+        return view('view-blog', ['blogs' => $blogData]);
     }
 
     //title cntroller-------
 
-    function addTitle(){
+    function addTitle()
+    {
         return view('add-title');
     }
 
-    function titlePost(Request $request){
-        $title = new Title();
-        $title->title = $request -> title;
-        $title->description = $request -> description;
-        $title->save();
+    function titlePost(Request $request)
+    {
+        $request->validate([
+            'image'=>'required|max:2048|mimes:jpeg,jpg,png,gif',
+           'title'=>'required | min:10|max:80',
+           'description'=>'nullable | max:250',
+           ]);
+        $slider = new slider();
+        $slider->image = $request->file('image')->storeAs('images', $request->image->getClientOriginalName(), 'public');
+        $slider->title = $request->title;
+        $slider->description = $request->description;
+        $slider->save();
     }
 
-    function viewTitle(Request $request){
-        $titleData=Title::latest()->paginate(1);
-        return view('view-title',['titles'=>$titleData]);
+    public function slider()
+    {
+        $sliderData = slider::latest()->paginate(3);
+
+        return view('slider', ['sliders' => $sliderData]);
     }
 
 
     //contact us---------
-    function contact(){
+    function contact()
+    {
         return view('contact');
     }
 
-    function contactPost(Request $request){
-        $contact= new Contact();
-        $contact->subject = $request -> subject;
-        $contact->email= $request -> email;
-        $contact->massage= $request ->massage;
+    function contactPost(Request $request)
+    {
+        $request->validate([
+            'image'=>'required|max:2048|mimes:jpeg,jpg,png,gif',
+           'email'=>'required | min:10|max:80',
+           'massage'=>'nullable | max:250',
+           ]);
+        $contact = new Contact();
+        $contact->subject = $request->subject;
+        $contact->email = $request->email;
+        $contact->massage = $request->massage;
         $contact->save();
+
+        if($contact){
+            return redirect(route('home'));
+        }
     }
 
+    public function delete($id){
+          $isDeleted=Blog::destroy($id);
+
+         if($isDeleted){
+            return redirect('view-blog');
+         }else{
+            return 'Blog not delete';
+         }
+    }
+
+
+    //edit function
+
+   public function edit($slug){
+    // $blog = Blog::find($slug);
+    $blog = Blog::where('slug',$slug)->get()->first();
+
+    if(!$blog)
+    {
+        return "Blog not found";
+    }else{
+        return view('edit',['data'=>$blog]);
+    }
+
+    }
+
+    public function editPost(Request $request, $slug){
+        // $blog = Blog::find( $slug );
+        $blog = Blog::where('slug',$slug)->get()->first();
+        $blog->image = $request->file('image')->storeAs('images', $request->image->getClientOriginalName(), 'public');
+        $blog->title = $request->title;
+        $blog->description = $request->description;
+        $blog->save();
+        if($blog){
+            return redirect('view-blog');
+        }else{
+            return 'Blog edit fail';
+        }
+
+    }
+
+    public function about(Request $request){
+        $aboutData= About::latest()->get();
+        return view('about',['abouts'=>$aboutData]);
+
 }
+}
+

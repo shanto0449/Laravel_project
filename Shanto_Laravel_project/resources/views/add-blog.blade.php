@@ -16,23 +16,25 @@
         <hr>
 
         <form action="{{route('blog.post')}}" method="post" enctype="multipart/form-data" class="ms-auto me-auto mt-auto" style="width: 500px">
+            @csrf
             <div class="mb-3">
-                @csrf
+
               <label class="form-label">Image</label>
-              <input type="file" class="form-control" name="image" >
+              <input type="file" class="form-control" name="image" ><span style="color: red">@error('image'){{$message}}@enderror</span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Title</label>
-                <input type="text" class="form-control" name="title">
+                <input type="text" class="form-control" name="title"><span style="color: red">@error('title'){{$message}}@enderror</span>
               </div>
 
             <div class="mb-3">
               <label  class="form-label">Description</label>
-             <textarea name="description" id="" cols="30" rows="10"></textarea>
+             <textarea name="description" id="" cols="30" rows="10"></textarea><span style="color: red">@error('description'){{$message}}@enderror</span>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary"><a href="/view-blog" style="color:white">Cancle</a></button>
           </form>
           </div>
 

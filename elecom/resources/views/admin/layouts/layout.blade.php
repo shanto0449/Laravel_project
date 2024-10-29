@@ -30,14 +30,30 @@
 
 				<ul class="sidebar-nav">
 					<li class="sidebar-header">
-						Pages
+						Main
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="index.html">
+					<li class="sidebar-item {{request()->routeIs('admin')?'active':''}}">
+						<a class="sidebar-link" href="{{route('admin')}}">
               <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
             </a>
 					</li>
+                    <li class="sidebar-header">
+						Categori
+					</li>
+
+					<li class="sidebar-item {{request()->routeIs('category.create')?'active':''}}">
+						<a class="sidebar-link" href="{{route('category.create')}}">
+              <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Crate</span>
+            </a>
+					</li>
+
+                    <li class="sidebar-item {{request()->routeIs('category.manage')?'active':''}}">
+						<a class="sidebar-link" href="{{route('category.manage')}}">
+              <i class="align-middle" data-feather="list"></i> <span class="align-middle">Manage</span>
+            </a>
+					</li>
+
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="pages-profile.html">
@@ -57,7 +73,7 @@
             </a>
 					</li>
 
-					<li class="sidebar-item active">
+					<li class="sidebar-item">
 						<a class="sidebar-link" href="pages-blank.html">
               <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
             </a>
@@ -293,7 +309,7 @@
 			<main class="content">
 				<div class="container-fluid p-0">
 
-					<h1 class="h3 mb-3">Blank Page</h1>
+					
 
 					@yield('admin_layout')
 

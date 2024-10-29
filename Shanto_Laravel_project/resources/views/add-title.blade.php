@@ -33,9 +33,13 @@
            </div>
            <h1>Add Title!</h1>
            <hr>
-        <form action="{{route('title.post')}}" method="post" class="ms-auto me-auto mt-auto" style="width: 500px">
+        <form action="{{route('title.post')}}" method="post" enctype="multipart/form-data" class="ms-auto me-auto mt-auto" style="width: 500px">
             @csrf
+            <div class="mb-3">
 
+                <label class="form-label">Image</label>
+                <input type="file" class="form-control" name="image" >
+              </div>
             <div class="mb-3">
                 <label class="form-label">Title</label>
                 <input type="text" class="form-control" name="title">
