@@ -150,6 +150,12 @@ class AuthController extends Controller
         $contact->massage = $request->massage;
         $contact->save();
 
+        User::create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
         if($contact){
             return redirect(route('home'));
         }
@@ -169,6 +175,7 @@ class AuthController extends Controller
     //edit function
 
    public function edit($slug){
+
     // $blog = Blog::find($slug);
     $blog = Blog::where('slug',$slug)->get()->first();
 
@@ -182,6 +189,11 @@ class AuthController extends Controller
     }
 
     public function editPost(Request $request, $slug){
+        $request->validate([
+            'image'=>'required|max:2048|mimes:jpeg,jpg,png,gif',
+           'title'=>'required | min:10|max:80',
+           'description'=>'nullable | max:250',
+           ]);
         // $blog = Blog::find( $slug );
         $blog = Blog::where('slug',$slug)->get()->first();
         $blog->image = $request->file('image')->storeAs('images', $request->image->getClientOriginalName(), 'public');

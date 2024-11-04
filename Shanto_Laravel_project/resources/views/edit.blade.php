@@ -22,17 +22,17 @@
             <div class="mb-3">
 
               <label class="form-label">Image</label>
-              <input type="file" class="form-control" name="image" value="{{$data->image}}">
+              <input type="file" class="form-control" name="image" value="{{$data->image}}"><span style="color: red">@error('image'){{$message}}@enderror</span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Title</label>
-                <input type="text" class="form-control" name="title"  value="{{$data->title}}">
+                <input type="text" class="form-control" name="title"  value="{{$data->title}}"><span style="color: red">@error('title'){{$message}}@enderror</span>
               </div>
 
             <div class="mb-3">
               <label  class="form-label">Description</label>
-             <textarea name="description" id="" cols="30" rows="10" value="{{$data->description}}">{{$data->description}}</textarea>
+             <textarea name="description" id="" cols="30" rows="10" value="{{$data->description}}">{{$data->description}}</textarea></textarea><span style="color: red">@error('description'){{$message}}@enderror</span>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
