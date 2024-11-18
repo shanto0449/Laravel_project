@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -48,6 +49,14 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(\App\Models\Role::class);
+        return $this->belongsTo(Role::class);
+    }
+
+    public function posts(){
+        return $this -> hasMany(Post::class);
+    }
+
+    public function favorite_posts(){
+        return $this->belongsToMany(Post::class)->withTimestamps();
     }
 }
