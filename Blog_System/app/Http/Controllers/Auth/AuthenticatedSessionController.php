@@ -32,9 +32,34 @@ class AuthenticatedSessionController extends Controller
         }elseif(Auth::check() && Auth::user()->role->id == 2){
             return redirect('author/dashboard');
         }
+        $redirectUrl = match ($request) {
+                    1 => 'admin/dashboard',
+                   2 => 'author/dashboard',
+                   default => route('dashboard', absolute: false),
+                };
 
-        return redirect()->intended(route('dashboard', absolute: false));
+
+        return redirect($request);
+        // ->intended(route('dashboard', absolute: false));
     }
+
+//     public function store(LoginRequest $request): RedirectResponse
+// {
+//     $request->authenticate();
+
+//     $request->session()->regenerate();
+
+//     $roleId = Auth::user()->role->id;
+
+//     $redirectUrl = match ($roleId) {
+//         1 => 'admin/dashboard',
+//         2 => 'author/dashboard',
+//         default => route('dashboard', absolute: false),
+//     };
+
+//     return redirect($redirectUrl);
+// }
+
 
     /**
      * Destroy an authenticated session.

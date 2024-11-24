@@ -76,24 +76,25 @@ class AuthPostController extends Controller
             $imagename = "default.png";
         }
 
+       
         $post = new Post();
         $post->user_id = Auth::id();
         $post->title = $request->title;
         $post->slug = $slug;
         $post->image = $imagename;
         $post->body = $request->body;
-        if (isset($request->status)) {
+        if(isset($request->status))
+        {
             $post->status = true;
-        } else {
+        }else {
             $post->status = false;
         }
         $post->is_approved = false;
         $post->save();
 
-        $post->categorys()->attach($request->categorys);
-
+        $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
-        
+
         $users = User::where('role_id','1')->get();
         Notification::send($users, new NewAuthorPost($post));
 
@@ -185,7 +186,7 @@ class AuthPostController extends Controller
         $post->is_approved = false;
         $post->save();
 
-        $post->categorys()->sync($request->categorys);
+        $post->categories()->sync($request->categories);
 
         $post->tags()->sync($request->tags);
 
@@ -207,7 +208,7 @@ class AuthPostController extends Controller
             Storage::disk('public')->delete('post/'.$post->image);
         }
 
-        $post->categorys()->detach();
+        $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
         Toastr::success('post Successfully Deleted','Success');

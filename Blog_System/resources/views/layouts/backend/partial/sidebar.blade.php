@@ -1,49 +1,94 @@
 <aside id="leftsidebar" class="sidebar">
     <!-- User Info -->
+   {{-- @if (Auth::check()) --}}
+
+   <div class="user-info">
+    <div class="image">
+        <img src="{{Storage::disk('public')->url('profile/'.Auth::user()->image)}}" width="48" height="48" alt="User" />
+    </div>
+    <div class="info-container">
+        <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ Auth::user()->name }}</div>
+        <div class="email">{{ Auth::user()->email }}</div>
+        <div class="btn-group user-helper-dropdown">
+            <i class="material-icons" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="true">keyboard_arrow_down</i>
+            <ul class="dropdown-menu pull-right">
+
+                <li>
+                    <a href="{{Auth::user()->role->id == 1 ? route('admin.settings.index') : route('author.settings.index')}}"><i class="material-icons">person</i>Profile</a>
+                </li>
+
+                <li role="separator" class="divider"></li>
+
+                <li role="separator" class="divider"></li>
+
+
+                <li>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                        <i class="material-icons">input</i>
+                        <span>Logout</span>
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+
+
+
+
+                {{-- <a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a> --}}
+
+            </ul>
+        </div>
+    </div>
+</div>
+{{-- @else
+
+
+   @endif --}}
+
+    {{-- @if (Auth::check())
     <div class="user-info">
         <div class="image">
-            <img src="{{ Storage::disk('public')->url('profile/'.Auth::user()->image) }}" width="48" height="48" alt="User" />
+            @if (Auth::user()->image && Storage::disk('public')->exists('profile/' . Auth::user()->image))
+                <img src="{{ Storage::disk('public')->url('profile/' . Auth::user()->image) }}" width="48" height="48" alt="User" />
+            @else
+                <img src="{{ asset('images/default-profile.png') }}" width="48" height="48" alt="Default User" />
+            @endif
         </div>
         <div class="info-container">
             <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ Auth::user()->name }}</div>
+                {{ Auth::user()->name }}
+            </div>
             <div class="email">{{ Auth::user()->email }}</div>
             <div class="btn-group user-helper-dropdown">
-                <i class="material-icons" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="true">keyboard_arrow_down</i>
+                <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                 <ul class="dropdown-menu pull-right">
-
                     <li>
-                        <a href="{{Auth::user()->role->id == 1 ? route('admin.settings.index') : route('author.settings.index')}}"><i class="material-icons">person</i>Profile</a>
+                        <a href="{{ Auth::user()->role->id == 1 ? route('admin.settings.index') : route('author.settings.index') }}">
+                            <i class="material-icons">person</i>Profile
+                        </a>
                     </li>
-
                     <li role="separator" class="divider"></li>
-
-                    <li role="separator" class="divider"></li>
-
-
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                                             document.getElementById('logout-form').submit();">
-                            <i class="material-icons">input</i>
-                            <span>Logout</span>
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="material-icons">input</i><span>Logout</span>
                         </a>
-
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                     </li>
-
-
-
-
-                    {{-- <a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a> --}}
-
                 </ul>
             </div>
         </div>
     </div>
+@endif --}}
+
     <!-- #User Info -->
     <!-- Menu -->
     <div class="menu">
@@ -84,6 +129,26 @@
                         <span>Pending Posts</span>
                     </a>
                 </li>
+
+                <li class="{{ Request::is('admin/favorite') ? 'active' : '' }}">
+                    <a href="{{ route('admin.favorite.index') }}">
+                        <i class="material-icons">favorite</i>
+                        <span>Favorite Posts</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/comments') ? 'active' : '' }}">
+                    <a href="{{ route('admin.comment.index') }}">
+                        <i class="material-icons">comment</i>
+                        <span>Comments</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/authors') ? 'active' : '' }}">
+                    <a href="{{ route('admin.author.index') }}">
+                        <i class="material-icons">account_circle</i>
+                        <span>Authors</span>
+                    </a>
+                </li>
+
 
                 <li class="{{ Request::is('admin/subscriber') ? 'active' : '' }}">
                     <a href="{{ route('admin.subscriber.index') }}">
@@ -130,6 +195,20 @@
                         <span>Posts</span>
                     </a>
                 </li>
+
+                <li class="{{ Request::is('author/favorite') ? 'active' : '' }}">
+                    <a href="{{ route('author.favorite.index') }}">
+                        <i class="material-icons">favorite</i>
+                        <span>Favorite Posts</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('author/comments') ? 'active' : '' }}">
+                    <a href="{{ route('author.comment.index') }}">
+                        <i class="material-icons">comment</i>
+                        <span>Comments</span>
+                    </a>
+                </li>
+
                 <li class="header">Systen</li>
                 <li class="{{ Request::is('author/settings') ? 'active' : '' }}">
                     <a href="{{ route('author.settings.index') }}">

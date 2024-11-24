@@ -19,10 +19,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'role_id',
         'name',
+        'username',
         'email',
         'password',
+        'image',
     ];
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,5 +63,12 @@ class User extends Authenticatable
 
     public function favorite_posts(){
         return $this->belongsToMany(Post::class)->withTimestamps();
+    }
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+    public function scopeAuthors($query){
+         return $query->where('role_id',2);
     }
 }

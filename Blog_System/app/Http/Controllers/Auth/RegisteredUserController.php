@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -27,24 +28,42 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+    public function store(Request $request)
+{
+    // Sanitize email and ensure lowercase
+    $request->merge(['email' => strtolower($request->email)]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    // Validate the request
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+        'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        event(new Registered($user));
 
-        Auth::login($user);
+    // Sanitize username if needed
+    $username = is_array($request->username) ? implode('', $request->username) : $request->username;
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    // Create the user
+    $user = User::create([
+        'role_id' => 2,
+        'name' => $request->name,
+        'username' => $username,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
+
+
+
+    // Trigger the Registered event and log the user in
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    return redirect()->intended(route('author.dashboard', absolute: false));
+    Toastr::success('Author Successfully Registere','Success');
+
+}
+
 }
