@@ -62,7 +62,7 @@ require __DIR__.'/auth.php';
 Route::group(['middleware'=>['auth']],function(){
   Route::post('favorite/{post}/add',[FavoriteController::class,'add'])->name('post.favorite');
 
-  Route::post('coment/{post}',[CommentsController::class,'store'])->name('comment.store');
+  Route::post('comment/{post}',[CommentsController::class,'store'])->name('comment.store');
 });
 
 

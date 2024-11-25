@@ -1,12 +1,12 @@
 @extends('layouts.frontend.app')
 
-@section('title','Posts')
+@section('title', 'Posts')
 
 @push('css')
     <link href="{{ asset('assets/frontend/css/category/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/frontend/css/category/responsive.css') }}" rel="stylesheet">
     <style>
-        .favorite_posts{
+        .favorite_posts {
             color: blue;
         }
     </style>
@@ -22,48 +22,60 @@
 
             <div class="row">
                 @forelse($posts as $post)
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100">
-                        <div class="single-post post-style-1">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <div class="single-post post-style-1">
 
-                            <div class="blog-image"><img src="{{ asset('storage/post/'.$post->image) }}" alt="{{ $post->title }}"></div>
+                                <div class="blog-image"><img src="{{ asset('storage/post/' . $post->image) }}"
+                                        alt="{{ $post->title }}"></div>
 
-                            <a class="avatar" href="{{route('author.profile',$post->user->username)}}"><img src="{{ Storage::disk('public')->url('profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="{{ route('author.profile', $post->user->username) }}"><img
+                                        src="{{ Storage::disk('public')->url('profile/' . $post->user->image) }}"
+                                        alt="Profile Image"></a>
 
-                            <div class="blog-info">
+                                <div class="blog-info">
 
-                                <h4 class="title"><a href="{{ route('post.details',$post->slug) }}"><b>{{ $post->title }}</b></a></h4>
+                                    <h4 class="title"><a
+                                            href="{{ route('post.details', $post->slug) }}"><b>{{ $post->title }}</b></a>
+                                    </h4>
 
-                                <ul class="post-footer">
+                                    <ul class="post-footer">
 
-                                    <li>
-                                        @guest
-                                        <a
-                                        href="javascript:void(0);"
+                                        <li>
+                                            @guest
+                                            <a href="javascript:void(0);" onclick="toastr.info('To add favorite list. You need to login first.','Info',{
+                                                closeButton: true,
+                                                progressBar: true,
+                                            })"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
+                                        @else
+                                        <a href="javascript:void(0);"
                                         onclick="event.preventDefault(); document.getElementById('favorite-form-{{ $post->id }}').submit();"
                                         class="{{ $post->favorite_to_users && $post->favorite_to_users->count() > 0 ? 'favorite_posts' : '' }}">
-                                        <i class="ion-heart"></i>{{ $post->favorite_to_users ? $post->favorite_to_users->count() : 0 }}
+                                        <i
+                                            class="ion-heart"></i>{{ $post->favorite_to_users ? $post->favorite_to_users->count() : 0 }}
                                     </a>
-                                        <form id="favorite-form-{{$post->id}}" method="POST" action="{{route('post.favorite',$post->id)}}" style="display: none">
-                                            @csrf
-                                        </form>
-                                    @endguest
+
+                                         <form id="favorite-form-{{ $post->id }}" method="POST" action="{{ route('post.favorite',$post->id) }}" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        @endguest
 
 
 
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="ion-chatbubble"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="ion-eye">{{$post->view_count}}</i></a>
-                                    </li>
-                                </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i
+                                                    class="ion-chatbubble"></i>{{ $post->comments->count() }}</i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="ion-eye">{{ $post->view_count }}</i></a>
+                                        </li>
+                                    </ul>
 
-                            </div><!-- blog-info -->
-                        </div><!-- single-post -->
-                    </div><!-- card -->
-                </div><!-- col-lg-4 col-md-6 -->
+                                </div><!-- blog-info -->
+                            </div><!-- single-post -->
+                        </div><!-- card -->
+                    </div><!-- col-lg-4 col-md-6 -->
 
                 @empty
                     {{-- <div class="col-lg-12 col-md-12">
@@ -84,5 +96,4 @@
 @endsection
 
 @push('js')
-
 @endpush

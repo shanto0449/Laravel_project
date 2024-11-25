@@ -13,9 +13,9 @@ class AuthorCommentController extends Controller
 {
     public function index()
     {
-        $comments = Comment::latest()->get();
-
-        return view('author.comments',compact('comments'));
+        // $comments = Comment::latest()->get();
+        $posts = Auth::user()->posts;
+        return view('author.comments',compact('posts'));
     }
 
     public function destory($id){

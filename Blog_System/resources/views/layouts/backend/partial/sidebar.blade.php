@@ -101,6 +101,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="">
+                    <a href="{{ route('home') }}">
+                        <i class="material-icons">home</i>
+                        <span>Home Page</span>
+                    </a>
+                </li>
 
                 <li class="{{ Request::is('admin/tag*') ? 'active' : '' }}">
                     <a href="{{ route('admin.tag.index') }}">
@@ -187,6 +193,12 @@
                     <a href="{{ route('author.dashboard') }}">
                         <i class="material-icons">dashboard</i>
                         <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="{{ route('home') }}">
+                        <i class="material-icons">home</i>
+                        <span>Home Page</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('author/post*') ? 'active' : '' }}">

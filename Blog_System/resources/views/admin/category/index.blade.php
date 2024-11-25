@@ -63,7 +63,7 @@
                                         <i class="material-icons">edit</i>
                                     </a>
 
-                                    <button class="btn btn-denger waves-sffect" type="button" onclick="deleteCategory({{$category->id}})">
+                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteCategory({{$category->id}})">
                                         <i class="material-icons">delete</i>
                                     </button>
 

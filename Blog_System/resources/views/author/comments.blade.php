@@ -18,7 +18,7 @@
                     <div class="header">
                         <h2>
                             All Comments
-                            <span class="badge bg-blue">{{ $comments->count() }}</span>
+                            {{-- <span class="badge bg-blue">{{ $posts->comments->count() }}</span> --}}
                         </h2>
                     </div>
                     <div class="body">
@@ -40,8 +40,9 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach ($comments as $key => $comment)
-                                       <tr>
+                                    @foreach ($posts as $key => $post)
+                                    @foreach ($post->comments as $comment)
+                                    <tr>
                                         <td>
                                             <div class="media">
                                                 <div class="media-left">
@@ -80,6 +81,9 @@
                                             </form>
                                         </td>
                                        </tr>
+
+                                    @endforeach
+
                                     @endforeach
                                 </tbody>
                             </table>
