@@ -96,7 +96,7 @@
             <li class="header">MAIN NAVIGATION</li>
             @if (Request::is('admin*'))
                 <li class="{{ Request::is('admin/dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('admin.dashboard') }}">
                         <i class="material-icons">dashboard</i>
                         <span>Dashboard</span>
                     </a>
